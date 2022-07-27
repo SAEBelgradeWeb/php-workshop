@@ -1,14 +1,15 @@
 <?php
 
 
-function fetchAllTasks($pdo)
-{
-    $query = $pdo->prepare("SELECT * FROM tasks");
+function view($view, $data = []) {
 
-    $query->execute();
+    extract($data);
 
-    return $query->fetchAll(PDO::FETCH_OBJ);
+
+    require "views/{$view}.view.php";
 }
+
+
 
 function dd($data)
 {

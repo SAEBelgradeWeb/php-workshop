@@ -1,4 +1,4 @@
 <?php
 
 
-$app['database']->insert('tasks', $_POST);
+App::get('database')->insert('tasks', $_POST);

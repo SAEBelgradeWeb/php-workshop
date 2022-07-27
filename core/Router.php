@@ -1,5 +1,5 @@
 <?php
-
+namespace App\Core;
 
 class Router {
 
@@ -31,15 +31,26 @@ class Router {
 
     public function direct($uri, $method)
     {
+
         if(array_key_exists($uri, $this->routes[$method])) {
-            ;
-            return $this->routes[$method][$uri];
+
+            return $this->callAction(
+                ...explode("@", $this->routes[$method][$uri]));
+           // return $this->routes[$method][$uri];
         }
 
         throw new Exception('No page found - 404');
     }
 
 
+    protected function callAction($controller, $method) {
+        $cn = "\\App\\Controllers\\{$controller}";
+        $controller = new $cn;
+        if( ! method_exists($controller, $method)) {
+            throw new \Exception('This method does not exist');
+        }
+        return $controller->$method();
 
+    }
 
 }

@@ -1,4 +1,5 @@
 <?php
+namespace App\Core\Database;
 
 class QueryBuilder
 {
@@ -17,7 +18,7 @@ class QueryBuilder
 
         $query->execute();
 
-        return $query->fetchAll(PDO::FETCH_OBJ);
+        return $query->fetchAll(\PDO::FETCH_OBJ);
     }
 
     public function insert($tablename, $parameters)
@@ -32,7 +33,7 @@ class QueryBuilder
         try {
             $query = $this->pdo->prepare($sql);
             $query->execute($parameters);
-        } catch(PDOException $exception) {
+        } catch(\PDOException $exception) {
            die($exception->getMessage());
         }
 
