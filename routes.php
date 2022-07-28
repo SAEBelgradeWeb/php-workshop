@@ -4,12 +4,14 @@
 
 $router->get('', 'PagesController@home');
 
-$router->get('about', 'PagesController@about');
-$router->get('contact', 'PagesController@contact');
-//$router->get('products', 'controllers/productsController.php');
-//
-//$router->post('submit-form', 'controllers/submitFormController.php');
-//$router->post('create-task', 'controllers/submitNewTaskController.php');
+//BOOKS
+$router->get('book', 'BooksController@index');
+$router->get('book/show', 'BooksController@show'); //book/show?id=1
+$router->get('book/create', 'BooksControoler@create');
+$router->post('book/create', 'BooksController@store');
+$router->get('book/edit', 'BooksController@edit'); //book/edit?id=1
+$router->post('book/edit', 'BooksController@update'); //book/edit?id=1
+$router->get('book/delete', 'BooksController@destroy'); //book/delete?id=1
 
 
 

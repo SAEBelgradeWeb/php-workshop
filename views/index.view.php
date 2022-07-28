@@ -1,30 +1,16 @@
 <?php require 'partials/header.view.php' ?>
 
-<div>
-    <form action="/create-task" method="post">
-
-        <div><label for="description">Task</label></div>
-        <div><input type="text" name="description" id="description"></div>
-
-        <div><label for="completed">Completed</label></div>
-        <div><input type="checkbox" name="completed" id="completed" value="1"></div>
-
-
-        <button>Add new</button>
-    </form>
+<div class="container-fluid bg-1 text-center">
+    <h3>Who Am I?</h3>
+    <img src="/images/book2.png" alt="Book" width="400">
+    <h3>I'm an adventurer</h3>
 </div>
 
 
-<ul>
-    <?php foreach ($tasks as $task) : ?>
-        <?php if ($task->completed): ?>
-            <li><strike><?= $task->description ?></strike></li>
-        <?php else: ?>
-            <li><?= $task->description ?></li>
-        <?php endif; ?>
-
-
-    <?php endforeach; ?>
-</ul>
+<div class="container-fluid bg-2 text-center">
+  <h3>Whant to rent a book?</h3>
+  <p>Lorem ipsum..</p>
+  <a href="#" class="btn btn-default btn-lg">Search</a>
+</div>
 
 <?php require 'partials/footer.view.php' ?>

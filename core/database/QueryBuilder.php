@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Core\Database;
 
 class QueryBuilder
@@ -12,18 +13,33 @@ class QueryBuilder
     }
 
 
-    public function selectAll($tablename)
+    public function selectAll($tablename, $tablename2 = "", $fields = [], $foreignKey = "")
     {
-        $query = $this->pdo->prepare("SELECT * FROM {$tablename}");
+
+        $sql = "";
+        if (!$tablename2) {
+            $sql = "SELECT * FROM {$tablename}";
+        } else {
+            $sql = sprintf("SELECT %s FROM {$tablename} LEFT JOIN {$tablename2} ON {$tablename2}.id = {$tablename}.{$foreignKey}",
+                implode(', ', $fields));
+        }
+
+
+        $query = $this->pdo->prepare($sql);
 
         $query->execute();
 
         return $query->fetchAll(\PDO::FETCH_OBJ);
     }
 
+    public function selectFitered($filter)
+    {
+
+    }
+
     public function insert($tablename, $parameters)
     {
-       // insert into tasks (task, completed) VALUES (:task, :completed)
+        // insert into tasks (task, completed) VALUES (:task, :completed)
         $sql = sprintf("INSERT INTO %s (%s) VALUES(%s)",
             $tablename,
             implode(", ", array_keys($parameters)),
@@ -33,12 +49,23 @@ class QueryBuilder
         try {
             $query = $this->pdo->prepare($sql);
             $query->execute($parameters);
-        } catch(\PDOException $exception) {
-           die($exception->getMessage());
+        } catch (\PDOException $exception) {
+            die($exception->getMessage());
         }
 
-        header("Location: /");
+    }
+
+    public function update()
+    {
 
     }
+
+    public function delete($tablename, $id)
+    {
+        $sql = "DELETE FROM {$tablename} WHERE id = {$id}";
+        $query = $this->pdo->prepare($sql);
+        $query->execute();
+    }
+
 
 }
