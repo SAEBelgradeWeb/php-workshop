@@ -18,7 +18,8 @@ namespace App\Controllers;
 
 use App\Core\App;
 
-class BooksController {
+class BooksController
+{
 
     public function index() //list all the books
     {
@@ -34,26 +35,44 @@ class BooksController {
     public function show() // show slingle book
     {
 
+        $fields = [
+            "books.id", "books.title", "books.year", "authors.name", "authors.lastname"
+        ];
+
+        $book = App::get('database')->selectAll('books', 'authors', $fields, 'author_id', ['books.id' => $_GET['id']]);
+
+        return view('books-show', compact('book'));
     }
 
     public function create() //display the form
     {
+        $authors = App::get('database')->selectAll('authors');
 
+        return view('books-create', compact('authors'));
     }
 
     public function store() //store created book
     {
+        App::get('database')->insert('books', $_POST);
 
+        header('Location: /book');
     }
 
     public function edit() //show form for editing
     {
 
+        $authors = App::get('database')->selectAll('authors');
+
+        $book = App::get('database')->selectAll('books', '', [], '', $_GET);
+
+        return view('books-edit', compact('book', 'authors'));
     }
 
     public function update() //store edited book
     {
+        App::get('database')->update('books', $_POST);
 
+        header('Location: /book');
     }
 
     public function destroy() //delete the book

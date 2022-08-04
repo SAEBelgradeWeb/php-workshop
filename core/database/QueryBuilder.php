@@ -13,7 +13,7 @@ class QueryBuilder
     }
 
 
-    public function selectAll($tablename, $tablename2 = "", $fields = [], $foreignKey = "")
+    public function selectAll($tablename, $tablename2 = "", $fields = [], $foreignKey = "", $filter = [])
     {
 
         $sql = "";
@@ -25,6 +25,22 @@ class QueryBuilder
         }
 
 
+        $out = "";
+
+        if (!empty($filter)) {
+            $out = " WHERE";
+            foreach ($filter as $key => $value) {
+                $out .= " {$key} = '{$value}',";
+            }
+
+            $out = trim($out, ',');
+        }
+        // ['id' => 1, 'name' => 'John']
+        // " WHERE id = '1', name='John'
+
+        $sql = $sql . $out . " ORDER BY {$tablename}.id DESC";
+
+
         $query = $this->pdo->prepare($sql);
 
         $query->execute();
@@ -32,10 +48,6 @@ class QueryBuilder
         return $query->fetchAll(\PDO::FETCH_OBJ);
     }
 
-    public function selectFitered($filter)
-    {
-
-    }
 
     public function insert($tablename, $parameters)
     {
@@ -55,8 +67,27 @@ class QueryBuilder
 
     }
 
-    public function update()
+    public function update($tablename, $parameters)
     {
+        $id = $parameters['id'];
+
+        unset($parameters['id']);
+
+        //"UPDATE books SET title = 'kasjkdlak', year = '2002' WHERE id='5'"
+
+        $out = "";
+        foreach ($parameters as $key => $value) {
+            $out .= " {$key} = '{$value}',";
+        }
+
+        $out = trim($out, ',');
+
+        $sql = sprintf("UPDATE %s SET %s WHERE id = '%s'",
+        $tablename, $out, $id);
+
+        $query = $this->pdo->prepare($sql);
+
+        $query->execute();
 
     }
 
